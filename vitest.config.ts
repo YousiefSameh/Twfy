@@ -14,11 +14,9 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/'
-      ],
+      exclude: ['node_modules/'],
       include: ['src/**/*.ts'],
-      all: true
+      all: true,
     },
   },
   resolve: {
@@ -27,6 +25,6 @@ export default defineConfig({
     },
   },
   esbuild: {
-    target: 'es2020'
-  }
+    target: 'es2020',
+  },
 })
