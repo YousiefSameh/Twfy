@@ -41,8 +41,9 @@
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.cli.json --noEmit",
     "cli:dev": "tsx src/cli/index.ts",
     "prepare": "husky install"
