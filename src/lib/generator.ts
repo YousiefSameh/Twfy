@@ -54,9 +54,10 @@ export class CssGenerator {
   }
 
   private generateMainCss(theme: ParsedTheme): string {
-    let css = generateHeader('Twfy Tokens - Main CSS Variables')
+    let css = '@import "tailwindcss";\n\n'
+    css += generateHeader('Twfy Tokens - Tailwind v4 Design Tokens')
 
-    // Root variables
+    // Root variables for compatibility
     css += ':root {\n'
     
     // Colors
@@ -94,6 +95,46 @@ export class CssGenerator {
       }
     }
 
+    css += '}\n\n'
+
+    // Tailwind v4 @theme directive with variable references
+    css += '@theme inline {\n'
+    
+    // Colors
+    for (const [name] of Object.entries(theme.colors)) {
+      css += formatCssVariable(name, `var(--${name})`) + '\n'
+    }
+
+    // Fonts
+    for (const [name] of Object.entries(theme.fonts)) {
+      css += formatCssVariable(name, `var(--${name})`) + '\n'
+    }
+
+    // Font sizes
+    for (const [name] of Object.entries(theme.fontSizes)) {
+      css += formatCssVariable(`font-size-${name}`, `var(--font-size-${name})`) + '\n'
+      if (theme.fontSizes[name].lineHeight) {
+        css += formatCssVariable(`line-height-${name}`, `var(--line-height-${name})`) + '\n'
+      }
+    }
+
+    // Spacing
+    for (const [name] of Object.entries(theme.spacing)) {
+      css += formatCssVariable(name, `var(--${name})`) + '\n'
+    }
+
+    // Border radius
+    for (const [name] of Object.entries(theme.borderRadius)) {
+      css += formatCssVariable(name, `var(--${name})`) + '\n'
+    }
+
+    // Custom properties
+    for (const [category, properties] of Object.entries(theme.custom)) {
+      for (const [name] of Object.entries(properties)) {
+        css += formatCssVariable(`${category}-${name}`, `var(--${category}-${name})`) + '\n'
+      }
+    }
+
     css += '}\n'
 
     return css
@@ -111,14 +152,28 @@ export class CssGenerator {
       return css + '/* No dark mode color overrides found */\n'
     }
 
-    css += '.dark {\n'
+    css += '@media (prefers-color-scheme: dark) {\n'
+    css += '  @theme inline {\n'
     
     for (const [name, value] of darkColors) {
       // Convert dark variant names back to base names
       const baseName = name.replace(/-dark(-|$)/, '$1').replace('-dark', '')
-      css += formatCssVariable(baseName, value) + '\n'
+      css += '  ' + formatCssVariable(baseName, value) + '\n'
     }
 
+    css += '  }\n'
+    css += '}\n\n'
+
+    css += '.dark {\n'
+    css += '  @theme inline {\n'
+    
+    for (const [name, value] of darkColors) {
+      // Convert dark variant names back to base names
+      const baseName = name.replace(/-dark(-|$)/, '$1').replace('-dark', '')
+      css += '  ' + formatCssVariable(baseName, value) + '\n'
+    }
+
+    css += '  }\n'
     css += '}\n'
 
     return css
