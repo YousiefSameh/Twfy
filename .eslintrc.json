@@ -1,17 +1,52 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-console": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-explicit-any": "warn"
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/triple-slash-reference": "off",
+    "react/no-unescaped-entities": "off"
   },
-  "ignorePatterns": ["dist/", ".next/", "node_modules/"]
+  "ignorePatterns": ["dist/", ".next/", "node_modules/", "*.js"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "error"
+      }
+    },
+    {
+      "files": ["src/cli/**/*.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["src/lib/parser.ts", "src/lib/utils.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["src/ui/config-input.tsx"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
 }

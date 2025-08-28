@@ -1,6 +1,6 @@
 {
   "name": "twfy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A CLI tool to convert Tailwind v3 config files into CSS-first tokens compatible with Tailwind v4's new CSS-first approach.",
   "keywords": [
     "tailwind",
@@ -15,16 +15,15 @@
   ],
   "author": "Yousief <yousief.sameh@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/yousiefsameh/twfy#readme",
+  "homepage": "https://github.com/YousiefSameh/Twfy#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yousiefsameh/twfy.git"
+    "url": "https://github.com/YousiefSameh/Twfy.git"
   },
   "bugs": {
-    "url": "https://github.com/yousiefsameh/twfy/issues"
+    "url": "https://github.com/YousiefSameh/Twfy/issues"
   },
-  "type": "module",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
   "bin": {
     "twfy": "./bin/twfy.js"
   },
@@ -67,8 +66,8 @@
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0",
@@ -77,7 +76,7 @@
     "lint-staged": "^15.0.0",
     "prettier": "^3.0.0",
     "tsx": "^4.0.0",
-    "typescript": "^5.0.0",
+    "typescript": "^5.3.3",
     "vitest": "^3.2.4"
   },
   "lint-staged": {

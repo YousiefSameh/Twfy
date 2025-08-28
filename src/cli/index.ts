@@ -1,7 +1,13 @@
 import { Command } from 'commander'
-import { convertCommand } from './commands/convert'
-const packageJson = require('../../package.json')
-const version = packageJson.version
+import { convertCommand } from './commands/convert.js'
+import { readFile } from 'fs/promises'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const pkg = JSON.parse(await readFile(join(__dirname, '../../package.json'), 'utf-8'))
+const { version } = pkg
 
 const program = new Command()
 
