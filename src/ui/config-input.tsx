@@ -27,7 +27,7 @@ export function ConfigInput({ onConvert, loading }: ConfigInputProps) {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onload = (event) => {
+      reader.onload = event => {
         const content = event.target?.result as string
         setConfig(content)
       }
@@ -79,7 +79,10 @@ export function ConfigInput({ onConvert, loading }: ConfigInputProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="config" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label
+          htmlFor="config"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+        >
           Tailwind Config
         </label>
         <div className="space-y-2">
@@ -104,7 +107,7 @@ export function ConfigInput({ onConvert, loading }: ConfigInputProps) {
           <textarea
             id="config"
             value={config}
-            onChange={(e) => setConfig(e.target.value)}
+            onChange={e => setConfig(e.target.value)}
             placeholder="Paste your tailwind.config.js or tailwind.config.ts content here..."
             className="w-full h-64 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white code-editor text-sm"
             required
@@ -114,34 +117,48 @@ export function ConfigInput({ onConvert, loading }: ConfigInputProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Options</h3>
+          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Options
+          </h3>
           <div className="space-y-2">
             <label className="flex items-center">
               <input
                 type="checkbox"
                 checked={options.dark}
-                onChange={(e) => setOptions({ ...options, dark: e.target.checked })}
+                onChange={e =>
+                  setOptions({ ...options, dark: e.target.checked })
+                }
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Generate dark mode</span>
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                Generate dark mode
+              </span>
             </label>
             <label className="flex items-center">
               <input
                 type="checkbox"
                 checked={options.split}
-                onChange={(e) => setOptions({ ...options, split: e.target.checked })}
+                onChange={e =>
+                  setOptions({ ...options, split: e.target.checked })
+                }
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Split into multiple files</span>
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                Split into multiple files
+              </span>
             </label>
             <label className="flex items-center">
               <input
                 type="checkbox"
                 checked={options.minify}
-                onChange={(e) => setOptions({ ...options, minify: e.target.checked })}
+                onChange={e =>
+                  setOptions({ ...options, minify: e.target.checked })
+                }
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Minify output</span>
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                Minify output
+              </span>
             </label>
           </div>
         </div>

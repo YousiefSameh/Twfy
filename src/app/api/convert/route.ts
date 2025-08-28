@@ -14,25 +14,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-
     // Parse the config string into a JavaScript object
     let parsedConfig
     try {
       // Enhanced parsing to handle modern CSS syntax
       let cleanContent = config
         .replace(/\/\*\*.*?\*\//gs, '') // Remove JSDoc comments
-        .replace(/\/\*.*?\*\//gs, '')   // Remove block comments
-        .replace(/\/\/.*$/gm, '')       // Remove line comments
+        .replace(/\/\*.*?\*\//gs, '') // Remove block comments
+        .replace(/\/\/.*$/gm, '') // Remove line comments
         .replace(/module\.exports\s*=\s*/, '')
         .replace(/export\s+default\s+/, '')
         .replace(/export\s*=\s*/, '')
         .trim()
-      
+
       // Remove trailing semicolon if present
       if (cleanContent.endsWith(';')) {
         cleanContent = cleanContent.slice(0, -1)
       }
-      
+
       // Use eval in a controlled environment for parsing
       parsedConfig = eval(`(${cleanContent})`)
     } catch (error) {

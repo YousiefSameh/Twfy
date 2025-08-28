@@ -52,11 +52,11 @@ describe('ConfigParser', () => {
       theme: {
         extend: {
           fontSize: {
-            'xs': ['0.75rem', '1rem'],
-            'xl': '1.25rem'
-          }
-        }
-      }
+            xs: ['0.75rem', '1rem'],
+            xl: '1.25rem',
+          },
+        },
+      },
     }
 
     const { theme } = parser.parse(config)
@@ -100,14 +100,14 @@ describe('ConfigParser', () => {
           colors: {
             'my.color': '#ff0000',
             'my color': '#00ff00',
-            'my-color': '#0000ff'
-          }
-        }
-      }
+            'my-color': '#0000ff',
+          },
+        },
+      },
     }
 
     const { theme } = parser.parse(config)
-    
+
     // All three should be sanitized to the same key 'my-color'
     expect(theme.colors['color-my-color']).toBeDefined()
     expect(Object.keys(theme.colors)).toHaveLength(1)

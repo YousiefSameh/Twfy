@@ -18,9 +18,11 @@ export function sanitizeKey(key: string): string {
  */
 export function isValidCssValue(value: string): boolean {
   if (typeof value !== 'string') return false
-  
+
   // Basic validation - not empty and doesn't contain dangerous characters
-  return value.trim().length > 0 && !value.includes('\n') && !value.includes('\r')
+  return (
+    value.trim().length > 0 && !value.includes('\n') && !value.includes('\r')
+  )
 }
 
 /**
@@ -33,7 +35,10 @@ export function formatCssVariable(name: string, value: string): string {
 /**
  * Format CSS keyframes
  */
-export function formatKeyframes(name: string, keyframes: Record<string, any>): string {
+export function formatKeyframes(
+  name: string,
+  keyframes: Record<string, any>
+): string {
   const rules = Object.entries(keyframes)
     .map(([key, value]) => {
       const properties = Object.entries(value)
@@ -42,7 +47,7 @@ export function formatKeyframes(name: string, keyframes: Record<string, any>): s
       return `  ${key} {\n${properties}\n  }`
     })
     .join('\n')
-  
+
   return `@keyframes ${name} {\n${rules}\n}`
 }
 
@@ -73,36 +78,45 @@ export function parseConfigString(content: string): any {
     // Remove TypeScript comments and module.exports statements for parsing
     let cleanContent = content
       .replace(/\/\*\*.*?\*\//gs, '') // Remove JSDoc comments
-      .replace(/\/\*.*?\*\//gs, '')   // Remove block comments
-      .replace(/\/\/.*$/gm, '')       // Remove line comments
+      .replace(/\/\*.*?\*\//gs, '') // Remove block comments
+      .replace(/\/\/.*$/gm, '') // Remove line comments
       .replace(/module\.exports\s*=\s*/, '')
       .replace(/export\s+default\s+/, '')
       .replace(/export\s*=\s*/, '')
       .trim()
-    
+
     // Remove trailing semicolon if present
     if (cleanContent.endsWith(';')) {
       cleanContent = cleanContent.slice(0, -1)
     }
-    
+
     // Try JSON.parse first for simple cases
     try {
       return JSON.parse(cleanContent)
     } catch {
       // Fall back to Function constructor for more complex cases
       const configFunction = new Function('require', `return ${cleanContent}`)
-      
+
       // Mock require function for basic cases
       const mockRequire = (module: string) => {
         throw new Error(`Dynamic require not supported: ${module}`)
       }
-      
+
       return configFunction(mockRequire)
     }
   } catch (error) {
     // Enhanced error reporting with more context
-    console.error('Config parsing failed. Content preview:', content.substring(0, 300))
-    console.error('Clean content preview:', content.replace(/\/\*\*.*?\*\//gs, '').replace(/module\.exports\s*=\s*/, '').substring(0, 300))
+    console.error(
+      'Config parsing failed. Content preview:',
+      content.substring(0, 300)
+    )
+    console.error(
+      'Clean content preview:',
+      content
+        .replace(/\/\*\*.*?\*\//gs, '')
+        .replace(/module\.exports\s*=\s*/, '')
+        .substring(0, 300)
+    )
     throw new Error(`Failed to parse config: ${error}`)
   }
 }
@@ -111,11 +125,13 @@ export function parseConfigString(content: string): any {
  * Detect if content is TypeScript
  */
 export function isTypeScript(content: string): boolean {
-  return content.includes('import type') || 
-         content.includes('interface ') || 
-         content.includes(': string') ||
-         content.includes(': number') ||
-         content.includes('<') && content.includes('>')
+  return (
+    content.includes('import type') ||
+    content.includes('interface ') ||
+    content.includes(': string') ||
+    content.includes(': number') ||
+    (content.includes('<') && content.includes('>'))
+  )
 }
 
 /**

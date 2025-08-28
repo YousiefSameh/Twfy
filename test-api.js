@@ -1,4 +1,4 @@
-const http = require('http');
+const http = require('http')
 
 const config = `/** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -17,12 +17,12 @@ module.exports = {
 		},
 	},
 	plugins: [],
-};`;
+};`
 
 const postData = JSON.stringify({
   config: config,
-  options: {}
-});
+  options: {},
+})
 
 const options = {
   hostname: 'localhost',
@@ -31,42 +31,42 @@ const options = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Content-Length': Buffer.byteLength(postData)
-  }
-};
+    'Content-Length': Buffer.byteLength(postData),
+  },
+}
 
-const req = http.request(options, (res) => {
-  let data = '';
-  
-  res.on('data', (chunk) => {
-    data += chunk;
-  });
-  
+const req = http.request(options, res => {
+  let data = ''
+
+  res.on('data', chunk => {
+    data += chunk
+  })
+
   res.on('end', () => {
-    console.log('Status:', res.statusCode);
-    console.log('Response:', data);
-    
+    console.log('Status:', res.statusCode)
+    console.log('Response:', data)
+
     try {
-      const parsed = JSON.parse(data);
+      const parsed = JSON.parse(data)
       if (parsed.error) {
-        console.log('ERROR:', parsed.error);
+        console.log('ERROR:', parsed.error)
         if (parsed.details) {
-          console.log('DETAILS:', parsed.details);
+          console.log('DETAILS:', parsed.details)
         }
       } else {
-        console.log('SUCCESS: CSS generated');
-        console.log('Full CSS Output:');
-        console.log(parsed.css);
+        console.log('SUCCESS: CSS generated')
+        console.log('Full CSS Output:')
+        console.log(parsed.css)
       }
     } catch (e) {
-      console.log('Failed to parse response:', e.message);
+      console.log('Failed to parse response:', e.message)
     }
-  });
-});
+  })
+})
 
-req.on('error', (e) => {
-  console.error('Request error:', e.message);
-});
+req.on('error', e => {
+  console.error('Request error:', e.message)
+})
 
-req.write(postData);
-req.end();
+req.write(postData)
+req.end()

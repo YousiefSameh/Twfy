@@ -102,11 +102,11 @@ describe('CssGenerator', () => {
       borderRadius: {},
       keyframes: {},
       animations: {},
-      custom: {}
+      custom: {},
     }
 
     const result = generator.generate(theme, { minify: true })
-    
+
     // Minified CSS should have less whitespace
     expect(result.css).not.toContain('\n  --color-primary')
     expect(result.css).toContain('--color-primary: #3b82f6')

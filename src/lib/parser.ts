@@ -17,7 +17,10 @@ export class ConfigParser {
     warnings: [],
   }
 
-  parse(config: TailwindConfig): { theme: ParsedTheme; report: ConversionReport } {
+  parse(config: TailwindConfig): {
+    theme: ParsedTheme
+    report: ConversionReport
+  } {
     const theme: ParsedTheme = {
       colors: {},
       fonts: {},
@@ -51,7 +54,11 @@ export class ConfigParser {
 
     // Border radius
     this.parseBorderRadius(baseTheme.borderRadius, theme.borderRadius, 'base')
-    this.parseBorderRadius(extendedTheme.borderRadius, theme.borderRadius, 'extend')
+    this.parseBorderRadius(
+      extendedTheme.borderRadius,
+      theme.borderRadius,
+      'extend'
+    )
 
     // Keyframes
     this.parseKeyframes(baseTheme.keyframes, theme.keyframes, 'base')
@@ -64,7 +71,11 @@ export class ConfigParser {
     return { theme, report: this.report }
   }
 
-  private parseColors(colors: any, target: Record<string, string>, source: string) {
+  private parseColors(
+    colors: any,
+    target: Record<string, string>,
+    source: string
+  ) {
     if (!colors || typeof colors !== 'object') return
 
     for (const [key, value] of Object.entries(colors)) {
@@ -84,17 +95,30 @@ export class ConfigParser {
     }
   }
 
-  private parseNestedColors(prefix: string, colors: any, target: Record<string, string>, source: string) {
+  private parseNestedColors(
+    prefix: string,
+    colors: any,
+    target: Record<string, string>,
+    source: string
+  ) {
     for (const [key, value] of Object.entries(colors)) {
       try {
         if (typeof value === 'string' && isValidCssValue(value)) {
           const sanitizedPrefix = sanitizeKey(prefix)
-          const sanitizedKey = key === 'DEFAULT' ? sanitizedPrefix : sanitizeKey(key)
-          const varName = key === 'DEFAULT' ? `color-${sanitizedPrefix}` : `color-${sanitizedPrefix}-${sanitizedKey}`
+          const sanitizedKey =
+            key === 'DEFAULT' ? sanitizedPrefix : sanitizeKey(key)
+          const varName =
+            key === 'DEFAULT'
+              ? `color-${sanitizedPrefix}`
+              : `color-${sanitizedPrefix}-${sanitizedKey}`
           target[varName] = value
           this.report.converted.colors.push(`${prefix}.${key} (${source})`)
         } else {
-          this.addSkipped('colors', `${prefix}.${key}`, 'Invalid nested color value')
+          this.addSkipped(
+            'colors',
+            `${prefix}.${key}`,
+            'Invalid nested color value'
+          )
         }
       } catch (error) {
         this.addSkipped('colors', `${prefix}.${key}`, `Parse error: ${error}`)
@@ -102,17 +126,25 @@ export class ConfigParser {
     }
   }
 
-  private parseFontFamilies(fonts: any, target: Record<string, string>, source: string) {
+  private parseFontFamilies(
+    fonts: any,
+    target: Record<string, string>,
+    source: string
+  ) {
     if (!fonts || typeof fonts !== 'object') return
 
     for (const [key, value] of Object.entries(fonts)) {
       try {
         const sanitizedKey = sanitizeKey(key)
         if (Array.isArray(value)) {
-          target[`font-${sanitizedKey}`] = value.map(f => f.includes(' ') ? `"${f}"` : f).join(', ')
+          target[`font-${sanitizedKey}`] = value
+            .map(f => (f.includes(' ') ? `"${f}"` : f))
+            .join(', ')
           this.report.converted.fonts.push(`${key} (${source})`)
         } else if (typeof value === 'string') {
-          target[`font-${sanitizedKey}`] = value.includes(' ') ? `"${value}"` : value
+          target[`font-${sanitizedKey}`] = value.includes(' ')
+            ? `"${value}"`
+            : value
           this.report.converted.fonts.push(`${key} (${source})`)
         } else {
           this.addSkipped('fonts', key, 'Invalid font family type')
@@ -123,7 +155,11 @@ export class ConfigParser {
     }
   }
 
-  private parseFontSizes(fontSizes: any, target: Record<string, { size: string; lineHeight?: string }>, source: string) {
+  private parseFontSizes(
+    fontSizes: any,
+    target: Record<string, { size: string; lineHeight?: string }>,
+    source: string
+  ) {
     if (!fontSizes || typeof fontSizes !== 'object') return
 
     for (const [key, value] of Object.entries(fontSizes)) {
@@ -134,9 +170,9 @@ export class ConfigParser {
           this.report.converted.fontSizes.push(`${key} (${source})`)
         } else if (Array.isArray(value) && value.length >= 1) {
           const [size, lineHeight] = value
-          target[sanitizedKey] = { 
+          target[sanitizedKey] = {
             size: size,
-            lineHeight: lineHeight || undefined
+            lineHeight: lineHeight || undefined,
           }
           this.report.converted.fontSizes.push(`${key} (${source})`)
         } else {
@@ -148,7 +184,11 @@ export class ConfigParser {
     }
   }
 
-  private parseSpacing(spacing: any, target: Record<string, string>, source: string) {
+  private parseSpacing(
+    spacing: any,
+    target: Record<string, string>,
+    source: string
+  ) {
     if (!spacing || typeof spacing !== 'object') return
 
     for (const [key, value] of Object.entries(spacing)) {
@@ -166,7 +206,11 @@ export class ConfigParser {
     }
   }
 
-  private parseBorderRadius(borderRadius: any, target: Record<string, string>, source: string) {
+  private parseBorderRadius(
+    borderRadius: any,
+    target: Record<string, string>,
+    source: string
+  ) {
     if (!borderRadius || typeof borderRadius !== 'object') return
 
     for (const [key, value] of Object.entries(borderRadius)) {
@@ -184,7 +228,11 @@ export class ConfigParser {
     }
   }
 
-  private parseKeyframes(keyframes: any, target: Record<string, Record<string, any>>, source: string) {
+  private parseKeyframes(
+    keyframes: any,
+    target: Record<string, Record<string, any>>,
+    source: string
+  ) {
     if (!keyframes || typeof keyframes !== 'object') return
 
     for (const [key, value] of Object.entries(keyframes)) {
@@ -201,7 +249,11 @@ export class ConfigParser {
     }
   }
 
-  private parseAnimations(animations: any, target: Record<string, string>, source: string) {
+  private parseAnimations(
+    animations: any,
+    target: Record<string, string>,
+    source: string
+  ) {
     if (!animations || typeof animations !== 'object') return
 
     for (const [key, value] of Object.entries(animations)) {

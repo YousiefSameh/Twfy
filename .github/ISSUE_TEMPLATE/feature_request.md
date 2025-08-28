@@ -20,9 +20,11 @@ Describe the specific use case or scenario where this feature would be helpful.
 
 **Example**
 If applicable, provide an example of how this feature would work:
+
 ```javascript
 // Example input
 ```
+
 ```css
 /* Expected output */
 ```

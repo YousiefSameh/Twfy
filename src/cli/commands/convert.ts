@@ -16,9 +16,9 @@ interface ConvertOptions {
 export async function convertCommand(input: string, options: ConvertOptions) {
   try {
     console.log(chalk.blue('🔄 Converting Tailwind config to CSS tokens...'))
-    
+
     // Check if input file exists
-    if (!await fs.pathExists(input)) {
+    if (!(await fs.pathExists(input))) {
       console.error(chalk.red(`❌ Input file not found: ${input}`))
       process.exit(1)
     }
@@ -26,7 +26,7 @@ export async function convertCommand(input: string, options: ConvertOptions) {
     // Read and parse the config file
     console.log(chalk.gray(`📖 Reading config from: ${input}`))
     const configContent = await fs.readFile(input, 'utf-8')
-    
+
     let parsedConfig
     try {
       parsedConfig = parseConfigString(configContent)
@@ -38,7 +38,7 @@ export async function convertCommand(input: string, options: ConvertOptions) {
     // Parse the Tailwind config
     const parser = new ConfigParser()
     const { theme, report: parseReport } = parser.parse(parsedConfig)
-    
+
     // Generate CSS
     const generator = new CssGenerator()
     const result = generator.generate(theme, {
@@ -49,7 +49,10 @@ export async function convertCommand(input: string, options: ConvertOptions) {
 
     // Determine output paths
     const outputDir = path.dirname(options.output)
-    const outputName = path.basename(options.output, path.extname(options.output))
+    const outputName = path.basename(
+      options.output,
+      path.extname(options.output)
+    )
     const outputExt = path.extname(options.output) || '.css'
 
     await fs.ensureDir(outputDir)
@@ -62,13 +65,19 @@ export async function convertCommand(input: string, options: ConvertOptions) {
     // Write additional files if splitting
     if (options.split) {
       if (result.darkCss) {
-        const darkOutputPath = path.join(outputDir, `${outputName}-dark${outputExt}`)
+        const darkOutputPath = path.join(
+          outputDir,
+          `${outputName}-dark${outputExt}`
+        )
         await fs.writeFile(darkOutputPath, result.darkCss)
         console.log(chalk.green(`✅ Generated: ${darkOutputPath}`))
       }
 
       if (result.animationsCss) {
-        const animationsOutputPath = path.join(outputDir, `${outputName}-animations${outputExt}`)
+        const animationsOutputPath = path.join(
+          outputDir,
+          `${outputName}-animations${outputExt}`
+        )
         await fs.writeFile(animationsOutputPath, result.animationsCss)
         console.log(chalk.green(`✅ Generated: ${animationsOutputPath}`))
       }
@@ -86,11 +95,17 @@ export async function convertCommand(input: string, options: ConvertOptions) {
     console.log(chalk.blue('\n📈 Conversion Summary:'))
     console.log(chalk.gray(`Colors: ${Object.keys(theme.colors).length}`))
     console.log(chalk.gray(`Fonts: ${Object.keys(theme.fonts).length}`))
-    console.log(chalk.gray(`Font Sizes: ${Object.keys(theme.fontSizes).length}`))
+    console.log(
+      chalk.gray(`Font Sizes: ${Object.keys(theme.fontSizes).length}`)
+    )
     console.log(chalk.gray(`Spacing: ${Object.keys(theme.spacing).length}`))
-    console.log(chalk.gray(`Border Radius: ${Object.keys(theme.borderRadius).length}`))
+    console.log(
+      chalk.gray(`Border Radius: ${Object.keys(theme.borderRadius).length}`)
+    )
     console.log(chalk.gray(`Keyframes: ${Object.keys(theme.keyframes).length}`))
-    console.log(chalk.gray(`Animations: ${Object.keys(theme.animations).length}`))
+    console.log(
+      chalk.gray(`Animations: ${Object.keys(theme.animations).length}`)
+    )
 
     // Display warnings if any
     if (parseReport.warnings.length > 0) {
@@ -101,13 +116,19 @@ export async function convertCommand(input: string, options: ConvertOptions) {
     }
 
     // Display skipped items if any
-    const skippedCount = Object.values(parseReport.skipped).reduce((sum, arr) => sum + arr.length, 0)
+    const skippedCount = Object.values(parseReport.skipped).reduce(
+      (sum, arr) => sum + arr.length,
+      0
+    )
     if (skippedCount > 0) {
-      console.log(chalk.yellow(`\n⏭️  Skipped ${skippedCount} items (see report for details)`))
+      console.log(
+        chalk.yellow(
+          `\n⏭️  Skipped ${skippedCount} items (see report for details)`
+        )
+      )
     }
 
     console.log(chalk.green('\n🎉 Conversion completed successfully!'))
-
   } catch (error) {
     console.error(chalk.red(`❌ Conversion failed: ${error}`))
     process.exit(1)

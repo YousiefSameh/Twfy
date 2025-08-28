@@ -6,14 +6,18 @@ import { dirname, join } from 'path'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-const pkg = JSON.parse(await readFile(join(__dirname, '../../package.json'), 'utf-8'))
+const pkg = JSON.parse(
+  await readFile(join(__dirname, '../../package.json'), 'utf-8')
+)
 const { version } = pkg
 
 const program = new Command()
 
 program
   .name('twfy')
-  .description('Convert Tailwind v3 config to CSS-first tokens for Tailwind v4 workflow')
+  .description(
+    'Convert Tailwind v3 config to CSS-first tokens for Tailwind v4 workflow'
+  )
   .version(version)
 
 program

@@ -6,7 +6,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Twfy - Tailwind v3 to CSS-first Migration',
-  description: 'Convert Tailwind v3 config to CSS-first tokens for Tailwind v4 workflow',
+  description:
+    'Convert Tailwind v3 config to CSS-first tokens for Tailwind v4 workflow',
 }
 
 export default function RootLayout({

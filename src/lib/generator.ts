@@ -1,14 +1,17 @@
 import { ParsedTheme, ConversionOptions, ConversionResult } from './types'
-import { 
-  formatCssVariable, 
-  formatKeyframes, 
-  formatAnimationClass, 
-  minifyCss, 
-  generateHeader 
+import {
+  formatCssVariable,
+  formatKeyframes,
+  formatAnimationClass,
+  minifyCss,
+  generateHeader,
 } from './utils'
 
 export class CssGenerator {
-  generate(theme: ParsedTheme, options: ConversionOptions = {}): ConversionResult {
+  generate(
+    theme: ParsedTheme,
+    options: ConversionOptions = {}
+  ): ConversionResult {
     const { dark = false, split = false, minify = false } = options
 
     let mainCss = this.generateMainCss(theme)
@@ -16,7 +19,11 @@ export class CssGenerator {
     let animationsCss = split ? this.generateAnimationsCss(theme) : undefined
 
     // Add animations to main CSS if not splitting
-    if (!split && (Object.keys(theme.keyframes).length > 0 || Object.keys(theme.animations).length > 0)) {
+    if (
+      !split &&
+      (Object.keys(theme.keyframes).length > 0 ||
+        Object.keys(theme.animations).length > 0)
+    ) {
       mainCss += '\n' + this.generateAnimationsCss(theme)
     }
 
@@ -59,7 +66,7 @@ export class CssGenerator {
 
     // Root variables for compatibility
     css += ':root {\n'
-    
+
     // Colors
     for (const [name, value] of Object.entries(theme.colors)) {
       css += formatCssVariable(name, value) + '\n'
@@ -74,7 +81,8 @@ export class CssGenerator {
     for (const [name, config] of Object.entries(theme.fontSizes)) {
       css += formatCssVariable(`font-size-${name}`, config.size) + '\n'
       if (config.lineHeight) {
-        css += formatCssVariable(`line-height-${name}`, config.lineHeight) + '\n'
+        css +=
+          formatCssVariable(`line-height-${name}`, config.lineHeight) + '\n'
       }
     }
 
@@ -99,7 +107,7 @@ export class CssGenerator {
 
     // Tailwind v4 @theme directive with variable references
     css += '@theme inline {\n'
-    
+
     // Colors
     for (const [name] of Object.entries(theme.colors)) {
       css += formatCssVariable(name, `var(--${name})`) + '\n'
@@ -112,9 +120,15 @@ export class CssGenerator {
 
     // Font sizes
     for (const [name] of Object.entries(theme.fontSizes)) {
-      css += formatCssVariable(`font-size-${name}`, `var(--font-size-${name})`) + '\n'
+      css +=
+        formatCssVariable(`font-size-${name}`, `var(--font-size-${name})`) +
+        '\n'
       if (theme.fontSizes[name].lineHeight) {
-        css += formatCssVariable(`line-height-${name}`, `var(--line-height-${name})`) + '\n'
+        css +=
+          formatCssVariable(
+            `line-height-${name}`,
+            `var(--line-height-${name})`
+          ) + '\n'
       }
     }
 
@@ -131,7 +145,11 @@ export class CssGenerator {
     // Custom properties
     for (const [category, properties] of Object.entries(theme.custom)) {
       for (const [name] of Object.entries(properties)) {
-        css += formatCssVariable(`${category}-${name}`, `var(--${category}-${name})`) + '\n'
+        css +=
+          formatCssVariable(
+            `${category}-${name}`,
+            `var(--${category}-${name})`
+          ) + '\n'
       }
     }
 
@@ -144,8 +162,8 @@ export class CssGenerator {
     let css = generateHeader('Twfy Tokens - Dark Mode Overrides')
 
     // Only generate dark overrides for colors that have dark variants
-    const darkColors = Object.entries(theme.colors).filter(([name]) => 
-      name.includes('-dark-') || name.endsWith('-dark')
+    const darkColors = Object.entries(theme.colors).filter(
+      ([name]) => name.includes('-dark-') || name.endsWith('-dark')
     )
 
     if (darkColors.length === 0) {
@@ -154,7 +172,7 @@ export class CssGenerator {
 
     css += '@media (prefers-color-scheme: dark) {\n'
     css += '  @theme inline {\n'
-    
+
     for (const [name, value] of darkColors) {
       // Convert dark variant names back to base names
       const baseName = name.replace(/-dark(-|$)/, '$1').replace('-dark', '')
@@ -166,7 +184,7 @@ export class CssGenerator {
 
     css += '.dark {\n'
     css += '  @theme inline {\n'
-    
+
     for (const [name, value] of darkColors) {
       // Convert dark variant names back to base names
       const baseName = name.replace(/-dark(-|$)/, '$1').replace('-dark', '')
@@ -192,11 +210,14 @@ export class CssGenerator {
     // Animation utility classes
     if (Object.keys(theme.animations).length > 0) {
       css += '@layer components {\n'
-      
+
       for (const [name, animation] of Object.entries(theme.animations)) {
-        css += '  ' + formatAnimationClass(name, animation).replace(/\n/g, '\n  ') + '\n\n'
+        css +=
+          '  ' +
+          formatAnimationClass(name, animation).replace(/\n/g, '\n  ') +
+          '\n\n'
       }
-      
+
       css += '}\n'
     }
 
@@ -204,7 +225,7 @@ export class CssGenerator {
   }
 
   generateReport(theme: ParsedTheme): string {
-    const totalConverted = 
+    const totalConverted =
       Object.keys(theme.colors).length +
       Object.keys(theme.fonts).length +
       Object.keys(theme.fontSizes).length +

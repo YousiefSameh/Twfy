@@ -5,17 +5,20 @@ Thank you for your interest in contributing to Twfy! This document provides guid
 ## Development Setup
 
 1. **Fork and clone the repository**
+
    ```bash
    git clone https://github.com/yousiefsameh/twfy.git
    cd twfy
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -54,6 +57,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 
 ### Types
+
 - `feat` - New feature
 - `fix` - Bug fix
 - `docs` - Documentation changes
@@ -63,6 +67,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 - `chore` - Maintenance tasks
 
 ### Examples
+
 ```
 feat(parser): add color -> css var mapping
 fix(cli): handle nested DEFAULT color mapping
@@ -83,11 +88,13 @@ Before submitting a PR, ensure:
 ## Pre-commit Hooks
 
 We use Husky and lint-staged to automatically:
+
 - Run ESLint and fix issues
 - Format code with Prettier
 - Run relevant tests
 
 Install hooks after cloning:
+
 ```bash
 npm run prepare
 ```
@@ -102,6 +109,7 @@ npm run prepare
 6. **Address review feedback**
 
 ### PR Requirements
+
 - [ ] All CI checks pass
 - [ ] Code review approved
 - [ ] Tests added/updated
@@ -115,6 +123,7 @@ npm run prepare
 - **Coverage**: Aim for >80% code coverage on new code
 
 Run tests:
+
 ```bash
 npm test              # Run all tests
 npm run test:coverage # Run with coverage report
@@ -148,6 +157,7 @@ src/
 ## Reporting Issues
 
 Use our issue templates:
+
 - **Bug reports**: Provide reproduction steps and environment details
 - **Feature requests**: Describe use case and expected behavior
 - **Questions**: Use discussions for general questions

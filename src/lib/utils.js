@@ -1,14 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sanitizeKey = sanitizeKey;
-exports.isValidCssValue = isValidCssValue;
-exports.formatCssVariable = formatCssVariable;
-exports.formatKeyframes = formatKeyframes;
-exports.formatAnimationClass = formatAnimationClass;
-exports.minifyCss = minifyCss;
-exports.parseConfigString = parseConfigString;
-exports.isTypeScript = isTypeScript;
-exports.generateHeader = generateHeader;
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.sanitizeKey = sanitizeKey
+exports.isValidCssValue = isValidCssValue
+exports.formatCssVariable = formatCssVariable
+exports.formatKeyframes = formatKeyframes
+exports.formatAnimationClass = formatAnimationClass
+exports.minifyCss = minifyCss
+exports.parseConfigString = parseConfigString
+exports.isTypeScript = isTypeScript
+exports.generateHeader = generateHeader
 /**
  * Sanitize a key to be valid CSS custom property name
  * - Convert to lowercase
@@ -16,99 +16,101 @@ exports.generateHeader = generateHeader;
  * - Remove invalid characters
  */
 function sanitizeKey(key) {
-    return key
-        .toLowerCase()
-        .replace(/[.\s]/g, '-')
-        .replace(/[^a-z0-9-]/g, '')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
+  return key
+    .toLowerCase()
+    .replace(/[.\s]/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
 }
 /**
  * Check if a value is a valid CSS value
  */
 function isValidCssValue(value) {
-    if (typeof value !== 'string')
-        return false;
-    // Basic validation - not empty and doesn't contain dangerous characters
-    return value.trim().length > 0 && !value.includes('\n') && !value.includes('\r');
+  if (typeof value !== 'string') return false
+  // Basic validation - not empty and doesn't contain dangerous characters
+  return (
+    value.trim().length > 0 && !value.includes('\n') && !value.includes('\r')
+  )
 }
 /**
  * Format CSS custom property declaration
  */
 function formatCssVariable(name, value) {
-    return `  --${name}: ${value};`;
+  return `  --${name}: ${value};`
 }
 /**
  * Format CSS keyframes
  */
 function formatKeyframes(name, keyframes) {
-    const rules = Object.entries(keyframes)
-        .map(([key, value]) => {
-        const properties = Object.entries(value)
-            .map(([prop, val]) => `    ${prop}: ${val};`)
-            .join('\n');
-        return `  ${key} {\n${properties}\n  }`;
+  const rules = Object.entries(keyframes)
+    .map(([key, value]) => {
+      const properties = Object.entries(value)
+        .map(([prop, val]) => `    ${prop}: ${val};`)
+        .join('\n')
+      return `  ${key} {\n${properties}\n  }`
     })
-        .join('\n');
-    return `@keyframes ${name} {\n${rules}\n}`;
+    .join('\n')
+  return `@keyframes ${name} {\n${rules}\n}`
 }
 /**
  * Format animation utility class
  */
 function formatAnimationClass(name, animation) {
-    return `.animate-${name} {\n  animation: ${animation};\n}`;
+  return `.animate-${name} {\n  animation: ${animation};\n}`
 }
 /**
  * Minify CSS by removing unnecessary whitespace
  */
 function minifyCss(css) {
-    return css
-        .replace(/\s+/g, ' ')
-        .replace(/;\s*}/g, '}')
-        .replace(/{\s*/g, '{')
-        .replace(/;\s*/g, ';')
-        .trim();
+  return css
+    .replace(/\s+/g, ' ')
+    .replace(/;\s*}/g, '}')
+    .replace(/{\s*/g, '{')
+    .replace(/;\s*/g, ';')
+    .trim()
 }
 /**
  * Parse Tailwind config from string (JS/TS content)
  */
 function parseConfigString(content) {
-    try {
-        // Remove module.exports and export statements for parsing
-        const cleanContent = content
-            .replace(/module\.exports\s*=\s*/, '')
-            .replace(/export\s+default\s+/, '')
-            .replace(/export\s*=\s*/, '');
-        // Use Function constructor to safely evaluate the config
-        const configFunction = new Function('require', `return ${cleanContent}`);
-        // Mock require function for basic cases
-        const mockRequire = (module) => {
-            throw new Error(`Dynamic require not supported: ${module}`);
-        };
-        return configFunction(mockRequire);
+  try {
+    // Remove module.exports and export statements for parsing
+    const cleanContent = content
+      .replace(/module\.exports\s*=\s*/, '')
+      .replace(/export\s+default\s+/, '')
+      .replace(/export\s*=\s*/, '')
+    // Use Function constructor to safely evaluate the config
+    const configFunction = new Function('require', `return ${cleanContent}`)
+    // Mock require function for basic cases
+    const mockRequire = module => {
+      throw new Error(`Dynamic require not supported: ${module}`)
     }
-    catch (error) {
-        throw new Error(`Failed to parse config: ${error}`);
-    }
+    return configFunction(mockRequire)
+  } catch (error) {
+    throw new Error(`Failed to parse config: ${error}`)
+  }
 }
 /**
  * Detect if content is TypeScript
  */
 function isTypeScript(content) {
-    return content.includes('import type') ||
-        content.includes('interface ') ||
-        content.includes(': string') ||
-        content.includes(': number') ||
-        content.includes('<') && content.includes('>');
+  return (
+    content.includes('import type') ||
+    content.includes('interface ') ||
+    content.includes(': string') ||
+    content.includes(': number') ||
+    (content.includes('<') && content.includes('>'))
+  )
 }
 /**
  * Generate CSS comment header
  */
 function generateHeader(title) {
-    return `/*
+  return `/*
  * ${title}
  * Generated by Twfy - Tailwind v3 to CSS-first migration tool
  * https://github.com/yousiefsameh/twfy
- */\n\n`;
+ */\n\n`
 }
 //# sourceMappingURL=utils.js.map

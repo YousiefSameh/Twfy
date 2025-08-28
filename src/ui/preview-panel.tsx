@@ -9,13 +9,17 @@ interface PreviewPanelProps {
 }
 
 export function PreviewPanel({ result, loading }: PreviewPanelProps) {
-  const [activeTab, setActiveTab] = useState<'css' | 'dark' | 'animations' | 'report'>('css')
+  const [activeTab, setActiveTab] = useState<
+    'css' | 'dark' | 'animations' | 'report'
+  >('css')
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-2 text-gray-600 dark:text-gray-300">Converting...</span>
+        <span className="ml-2 text-gray-600 dark:text-gray-300">
+          Converting...
+        </span>
       </div>
     )
   }
@@ -24,10 +28,23 @@ export function PreviewPanel({ result, loading }: PreviewPanelProps) {
     return (
       <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
         <div className="text-center">
-          <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <svg
+            className="w-12 h-12 mx-auto mb-4 opacity-50"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
           </svg>
-          <p>Paste your Tailwind config and click "Convert to CSS" to see the generated tokens</p>
+          <p>
+            Paste your Tailwind config and click "Convert to CSS" to see the
+            generated tokens
+          </p>
         </div>
       </div>
     )
@@ -35,9 +52,23 @@ export function PreviewPanel({ result, loading }: PreviewPanelProps) {
 
   const tabs = [
     { id: 'css' as const, label: 'Main CSS', content: result.css },
-    ...(result.darkCss ? [{ id: 'dark' as const, label: 'Dark Mode', content: result.darkCss }] : []),
-    ...(result.animationsCss ? [{ id: 'animations' as const, label: 'Animations', content: result.animationsCss }] : []),
-    { id: 'report' as const, label: 'Report', content: generateReportText(result) },
+    ...(result.darkCss
+      ? [{ id: 'dark' as const, label: 'Dark Mode', content: result.darkCss }]
+      : []),
+    ...(result.animationsCss
+      ? [
+          {
+            id: 'animations' as const,
+            label: 'Animations',
+            content: result.animationsCss,
+          },
+        ]
+      : []),
+    {
+      id: 'report' as const,
+      label: 'Report',
+      content: generateReportText(result),
+    },
   ]
 
   const activeContent = tabs.find(tab => tab.id === activeTab)?.content || ''
@@ -74,7 +105,7 @@ export function PreviewPanel({ result, loading }: PreviewPanelProps) {
       {/* Tabs */}
       <div className="border-b border-gray-200 dark:border-gray-700">
         <nav className="-mb-px flex space-x-8">
-          {tabs.map((tab) => (
+          {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -100,9 +131,14 @@ export function PreviewPanel({ result, loading }: PreviewPanelProps) {
         </button>
         <button
           onClick={() => {
-            const filename = activeTab === 'report' ? 'twfy-report.md' : 
-                           activeTab === 'dark' ? 'tokens-dark.css' :
-                           activeTab === 'animations' ? 'animations.css' : 'tokens.css'
+            const filename =
+              activeTab === 'report'
+                ? 'twfy-report.md'
+                : activeTab === 'dark'
+                  ? 'tokens-dark.css'
+                  : activeTab === 'animations'
+                    ? 'animations.css'
+                    : 'tokens.css'
             handleDownload(activeContent, filename)
           }}
           className="px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
@@ -114,7 +150,13 @@ export function PreviewPanel({ result, loading }: PreviewPanelProps) {
       {/* Content */}
       <div className="relative">
         <pre className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md p-4 overflow-auto max-h-96 text-sm code-editor">
-          <code className={activeTab === 'report' ? 'text-gray-800 dark:text-gray-200' : 'text-gray-800 dark:text-gray-200'}>
+          <code
+            className={
+              activeTab === 'report'
+                ? 'text-gray-800 dark:text-gray-200'
+                : 'text-gray-800 dark:text-gray-200'
+            }
+          >
             {activeContent}
           </code>
         </pre>
@@ -127,25 +169,33 @@ export function PreviewPanel({ result, loading }: PreviewPanelProps) {
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {result.report.converted.colors.length}
             </div>
-            <div className="text-xs text-blue-600 dark:text-blue-400">Colors</div>
+            <div className="text-xs text-blue-600 dark:text-blue-400">
+              Colors
+            </div>
           </div>
           <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
               {result.report.converted.fonts.length}
             </div>
-            <div className="text-xs text-green-600 dark:text-green-400">Fonts</div>
+            <div className="text-xs text-green-600 dark:text-green-400">
+              Fonts
+            </div>
           </div>
           <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
             <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
               {result.report.converted.spacing.length}
             </div>
-            <div className="text-xs text-purple-600 dark:text-purple-400">Spacing</div>
+            <div className="text-xs text-purple-600 dark:text-purple-400">
+              Spacing
+            </div>
           </div>
           <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3">
             <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
               {result.report.converted.keyframes.length}
             </div>
-            <div className="text-xs text-orange-600 dark:text-orange-400">Keyframes</div>
+            <div className="text-xs text-orange-600 dark:text-orange-400">
+              Keyframes
+            </div>
           </div>
         </div>
       )}
@@ -155,12 +205,15 @@ export function PreviewPanel({ result, loading }: PreviewPanelProps) {
 
 function generateReportText(result: ConversionResult): string {
   const { report } = result
-  
+
   let text = '# Twfy Conversion Report\n\n'
-  
-  const totalConverted = Object.values(report.converted).reduce((sum, arr) => sum + arr.length, 0)
+
+  const totalConverted = Object.values(report.converted).reduce(
+    (sum, arr) => sum + arr.length,
+    0
+  )
   text += `**Total converted:** ${totalConverted} tokens\n\n`
-  
+
   // Converted items
   Object.entries(report.converted).forEach(([category, items]) => {
     if (items.length > 0) {
@@ -171,7 +224,7 @@ function generateReportText(result: ConversionResult): string {
       text += '\n'
     }
   })
-  
+
   // Skipped items
   if (Object.keys(report.skipped).length > 0) {
     text += '## Skipped Items\n\n'
@@ -183,7 +236,7 @@ function generateReportText(result: ConversionResult): string {
       text += '\n'
     })
   }
-  
+
   // Warnings
   if (report.warnings.length > 0) {
     text += '## Warnings\n\n'
@@ -191,6 +244,6 @@ function generateReportText(result: ConversionResult): string {
       text += `- ${warning}\n`
     })
   }
-  
+
   return text
 }
