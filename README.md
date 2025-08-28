@@ -88,4 +88,7 @@ npm run build
 
 ## License
 
-MIT
+Made with ❤️ by Yousief Sameh.  
+This project is licensed under the [MIT License](LICENSE).
+
+© 2025 Yousief Sameh

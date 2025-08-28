@@ -1,27 +1,42 @@
 {
   "name": "twfy",
   "version": "0.1.0",
-  "description": "Convert Tailwind v3 config to CSS-first tokens for Tailwind v4 workflow",
+  "description": "A CLI tool to convert Tailwind v3 config files into CSS-first tokens compatible with Tailwind v4's new CSS-first approach.",
   "keywords": [
     "tailwind",
+    "tailwindcss",
     "css",
     "tokens",
+    "design-tokens",
     "migration",
-    "css-variables"
+    "css-variables",
+    "tailwind-v4",
+    "cli"
   ],
-  "author": "Yousief",
+  "author": "Yousief <yousief.sameh@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/yousiefsameh/twfy#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/yousiefsameh/twfy.git"
   },
+  "bugs": {
+    "url": "https://github.com/yousiefsameh/twfy/issues"
+  },
+  "type": "module",
   "main": "dist/index.js",
   "bin": {
     "twfy": "./bin/twfy.js"
   },
+  "files": [
+    "dist",
+    "bin",
+    "src/lib"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build && tsc --project tsconfig.cli.json",
+    "prepublishOnly": "npm run build",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
